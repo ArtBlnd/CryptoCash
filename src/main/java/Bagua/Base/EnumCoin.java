@@ -15,7 +15,11 @@ public enum EnumCoin
     SPHR, SPR, START, STEEM, STR, STRAT, SWIFT, SWT, SYNX, SYS, THC, TIME, TKN, TRIG, 
     TRST, TRUST, TX, UBQ, UNB, UNO, VIA, VOX, VRC, VRM, VTC, VTR, WAVES, WINGS, XAUR, 
     XBB, XBC, XCP, XDN, XEL, XEM, XLM, XMG, XMR, XPM, XRP, XST, XVC, XVG, XWC, XZC, ZCL,
-    ZEC, ZEN;
+    ZEC, ZEN,
+    // need to sort 
+    RRT, BCC, BCU, IOT, EOS, SAN, // <- bitfinex 
+    ZMC, QTUM, GXS // <- Yunbi
+    ;
 
     public String toString()
     {
