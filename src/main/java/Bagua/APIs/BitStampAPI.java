@@ -15,8 +15,8 @@ import Bagua.Interface.ICachedSite;
 
 public class BitStampAPI implements ICachedSite
 {
-    private final String BitStampXRP_URL = "https://www.bitstamp.net/api/ticker/xrpbtc";
-    private final String BitStampLTC_URL = "https://www.bitstamp.net/api/ticker/ltcbtc";
+    private final String BitStampXRP_URL = "https://www.bitstamp.net/api/v2/ticker/xrpbtc";
+    private final String BitStampLTC_URL = "https://www.bitstamp.net/api/v2/ticker/ltcbtc";
 
     final private String BidToken = "bid";
     final private String AskToken = "ask";

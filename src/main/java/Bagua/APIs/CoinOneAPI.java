@@ -69,6 +69,26 @@ public class CoinOneAPI implements ICachedSite
     {
         String targetTickerURL    = tickerRequestURL + CoinTypeToToken(type);
         String targetOrderbookURL = orderbookRequestURL + CoinTypeToToken(type);
+        CoinPrice BTCPrice = new CoinPrice();
+        {
+            final String TargetURL = "https://www.okcoin.com/api/v1/ticker.do?symbol=";
+            URL                 URLTarget = new URL(TargetURL);
+            InputStreamReader   URLStream = new InputStreamReader(URLTarget.openStream());
+            JSONParser          TickerParser = new JSONParser();
+            JSONObject ParsedJSON = (JSONObject) TickerParser.parse(URLStream);
+            JSONObject ParsedTicker = (JSONObject) ParsedJSON.get("ticker");
+
+            String BTCName = "btc_usd";
+            JSONObject BTCInfo = (JSONObject) ParsedTicker.get(BTCName);
+
+            // just for safety reason. JSONObject.something -> String -> Double
+            BTCPrice.Bid = Double.parseDouble(BTCInfo.get(BidToken).toString());
+            BTCPrice.Ask = Double.parseDouble(BTCInfo.get(AskToken).toString());
+            BTCPrice.Highest = Double.parseDouble(BTCInfo.get(HighestIn24Hr).toString());
+            BTCPrice.Lowest  = Double.parseDouble(BTCInfo.get(LowestIn24Hr).toString());
+
+        }
+
 
         try {
             URL                 CoinOneApiTickerURL     = new URL(targetTickerURL);
@@ -93,8 +113,8 @@ public class CoinOneAPI implements ICachedSite
             jsonArray_orderbook_bid = (JSONArray) jsonObject_orderbook.get("bid");
 
             
-            newPrice.Highest = Double.parseDouble((String)jsonObject_ticker.get(tokenMaxPrice));
-            newPrice.Lowest = Double.parseDouble((String)jsonObject_ticker.get(tokenMinPrice));
+            newPrice.Highest = Double.parseDouble((String)jsonObject_ticker.get(tokenMaxPrice))/ BTCPrice.Highest;
+            newPrice.Lowest = Double.parseDouble((String)jsonObject_ticker.get(tokenMinPrice))/ BTCPrice.Lowest;
             /*
             super.get(type).FirstPrice = Double.parseDouble((String)jsonObject_ticker.get(tokenFirstPrice));
             super.get(type).LastPrice = Double.parseDouble((String)jsonObject_ticker.get(tokenLastPrice));
@@ -106,9 +126,9 @@ public class CoinOneAPI implements ICachedSite
             jsonObject_orderbook_price_bid = (JSONObject)jsonArray_orderbook_bid.get(jsonArray_orderbook_ask.size());
             jsonObject_orderbook_price_ask = (JSONObject)jsonArray_orderbook_ask.get(jsonArray_orderbook_ask.size());
 
-            newPrice.Ask = Double.parseDouble((String)jsonObject_orderbook_price_bid.get(tokenPrice));
-            newPrice.Bid = Double.parseDouble((String)jsonObject_orderbook_price_ask.get(tokenPrice));
-            
+            newPrice.Ask = Double.parseDouble((String)jsonObject_orderbook_price_bid.get(tokenPrice))/ BTCPrice.Ask;
+            newPrice.Bid = Double.parseDouble((String)jsonObject_orderbook_price_ask.get(tokenPrice))/ BTCPrice.Bid;
+
             CachedPrice.put(type, newPrice);
             
             stream_ticker.close();
